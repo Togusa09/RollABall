@@ -13,7 +13,7 @@ public class PickupSpawner : MonoBehaviour
 
     void Awake()
     {
-        _pickupSpawnAreas = GetComponentsInChildren<PickupSpawnArea>();
+        _pickupSpawnAreas = FindObjectsOfType<PickupSpawnArea>();
     }
 
     // Start is called before the first frame update
