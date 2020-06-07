@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PickupSpawner : MonoBehaviour
@@ -8,6 +8,8 @@ public class PickupSpawner : MonoBehaviour
 
     public float PickupSpawnInterval;
     public Pickup PickupPrefab;
+    public int MaxPickups = 20;
+
 
     void Awake()
     {
@@ -31,17 +33,37 @@ public class PickupSpawner : MonoBehaviour
     {
         while (enabled)
         {
-            var spawnArea = _pickupSpawnAreas[0]; // Only have one at the moment
-            var maxBound = spawnArea.transform.TransformPoint(new Vector3(0.5f, 0.5f, 0.5f));
-            var minBound = spawnArea.transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
+            if (GetComponentsInChildren<Pickup>().Length < MaxPickups)
+            {
+                var spawnAreaIndex = Random.Range(0, _pickupSpawnAreas.Length);
 
-            var xSpawnPosition = Random.Range(minBound.x, maxBound.x);
-            var ySpawnPosition = 0.5f; // Shift half unit up as pickup origin is in center
-            var zSpawnPosition = Random.Range(minBound.z, maxBound.z);
+                var spawnArea = _pickupSpawnAreas[spawnAreaIndex];
+                var maxBound = spawnArea.transform.TransformPoint(new Vector3(0.5f, 0.5f, 0.5f));
+                var minBound = spawnArea.transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
 
-            var newPickup = Instantiate(PickupPrefab, new Vector3(xSpawnPosition, ySpawnPosition, zSpawnPosition), Quaternion.identity, transform);
+                var xSpawnPosition = Random.Range(minBound.x, maxBound.x);
+                var ySpawnPosition = 0.5f; // Shift half unit up as pickup origin is in center
+                var zSpawnPosition = Random.Range(minBound.z, maxBound.z);
+
+                GetOrCreatePickup(new Vector3(xSpawnPosition, ySpawnPosition, zSpawnPosition));
+            }
 
             yield return new WaitForSeconds(PickupSpawnInterval);
         }
+    }
+
+    private Pickup GetOrCreatePickup(Vector3 position)
+    {
+        var existing = GetComponentsInChildren<Pickup>(true).FirstOrDefault(x => !x.isActiveAndEnabled);
+        if (existing)
+        {
+            existing.transform.position = position;
+            existing.transform.rotation = Quaternion.identity;
+            existing.gameObject.SetActive(true);
+
+            return existing;
+        }
+
+        return Instantiate(PickupPrefab, position, Quaternion.identity, transform);
     }
 }
