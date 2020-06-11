@@ -1,6 +1,14 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
+[System.Serializable]
+public class PickupWeights 
+{
+    public int Weight;
+    public Pickup Prefab;
+}
 
 public class PickupSpawner : MonoBehaviour
 {
@@ -9,6 +17,8 @@ public class PickupSpawner : MonoBehaviour
     public float PickupSpawnInterval;
     public Pickup PickupPrefab;
     public int MaxPickups = 20;
+
+    public List<PickupWeights> Pickups = new List<PickupWeights>();
 
 
     void Awake()
@@ -28,7 +38,6 @@ public class PickupSpawner : MonoBehaviour
         
     }
 
-
     IEnumerator SpawnPickup()
     {
         while (enabled)
@@ -45,16 +54,37 @@ public class PickupSpawner : MonoBehaviour
                 var ySpawnPosition = 0.5f; // Shift half unit up as pickup origin is in center
                 var zSpawnPosition = Random.Range(minBound.z, maxBound.z);
 
-                GetOrCreatePickup(new Vector3(xSpawnPosition, ySpawnPosition, zSpawnPosition));
+                var type = GetRandomPickupType();
+
+                GetOrCreatePickup(type, new Vector3(xSpawnPosition, ySpawnPosition, zSpawnPosition));
             }
 
             yield return new WaitForSeconds(PickupSpawnInterval);
         }
     }
 
-    private Pickup GetOrCreatePickup(Vector3 position)
+    private PickupWeights GetRandomPickupType()
     {
-        var existing = GetComponentsInChildren<Pickup>(true).FirstOrDefault(x => !x.isActiveAndEnabled);
+        var totalWeights = Pickups.Sum(x => x.Weight);
+        var weightedRandom = Random.Range(0, totalWeights);
+
+        int currentSum = 0;
+        foreach(var pickup in Pickups)
+        {
+            currentSum += pickup.Weight;
+
+            if (currentSum > weightedRandom)
+            {
+                return pickup;
+            }
+        }
+
+        return Pickups[0];
+    }
+
+    private Pickup GetOrCreatePickup(PickupWeights pickup, Vector3 position)
+    {
+        var existing = GetComponentsInChildren<Pickup>(true).FirstOrDefault(x => !x.isActiveAndEnabled && x.PickupType == pickup.Prefab.PickupType);
         if (existing)
         {
             existing.transform.position = position;
@@ -64,6 +94,6 @@ public class PickupSpawner : MonoBehaviour
             return existing;
         }
 
-        return Instantiate(PickupPrefab, position, Quaternion.identity, transform);
+        return Instantiate(pickup.Prefab, position, Quaternion.identity, transform);
     }
 }

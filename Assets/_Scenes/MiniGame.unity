@@ -1417,6 +1417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  growthRate: 0.2
   countText: {fileID: 1799334765}
   winText: {fileID: 937577409}
 --- !u!54 &648894362
@@ -1468,6 +1469,11 @@ MonoBehaviour:
   PickupPrefab: {fileID: 173201974916411999, guid: 212ff2a2667f73647ad6cf7c39a0b068,
     type: 3}
   MaxPickups: 20
+  Pickups:
+  - Weight: 6
+    Prefab: {fileID: 173201974916411999, guid: 212ff2a2667f73647ad6cf7c39a0b068, type: 3}
+  - Weight: 1
+    Prefab: {fileID: 173201974916411999, guid: fcff4f6b6a369f84f9855c4c06e3f94e, type: 3}
 --- !u!4 &655827312
 Transform:
   m_ObjectHideFlags: 0

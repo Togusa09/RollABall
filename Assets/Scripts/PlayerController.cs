@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +7,7 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
+    public float growthRate;
     public Text countText;
     public Text winText;
 
@@ -38,8 +38,23 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Pick Up"))
         {
             other.gameObject.SetActive(false);
-            count = count + 1;
-            SetCountText();
+            var pickup = other.gameObject.GetComponent<Pickup>();
+
+            switch (pickup.PickupType)
+            {
+                case PickupType.Point:
+                    {
+                        count = count + 1;
+                        SetCountText();
+                        break;
+                    }
+                    
+                case PickupType.Grow:
+                    {
+                        transform.localScale += (Vector3.one * 0.1f);
+                        break;
+                    }
+            }
         }
     }
 
