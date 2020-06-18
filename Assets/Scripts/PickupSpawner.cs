@@ -23,7 +23,12 @@ public class PickupSpawner : MonoBehaviour
 
     void Awake()
     {
-        _pickupSpawnAreas = FindObjectsOfType<PickupSpawnArea>();
+        RescanSpawnAreas();
+    }
+
+    private void OnEnable()
+    {
+        RescanSpawnAreas();
     }
 
     // Start is called before the first frame update
@@ -95,5 +100,10 @@ public class PickupSpawner : MonoBehaviour
         }
 
         return Instantiate(pickup.Prefab, position, Quaternion.identity, transform);
+    }
+
+    public void RescanSpawnAreas()
+    {
+        _pickupSpawnAreas = FindObjectsOfType<PickupSpawnArea>();
     }
 }

@@ -37,12 +37,18 @@ public class PickupWeightUIE : PropertyDrawer
 
         // Calculate rects
         var amountRect = new Rect(position.x, position.y, 30, position.height);
-        var unitRect = new Rect(position.x + 35, position.y, 50, position.height);
+        var unitRect = new Rect(position.x + 35, position.y, 150, position.height);
+        var typeRect = new Rect(position.x + 155, position.y, 150, position.height);
 
         // Draw fields - passs GUIContent.none to each so they are drawn without labels
-        
+
         EditorGUI.PropertyField(amountRect, property.FindPropertyRelative("Weight"), GUIContent.none);
         EditorGUI.PropertyField(unitRect, property.FindPropertyRelative("Prefab"), GUIContent.none);
+
+        //var pickupType = property.FindPropertyRelative("Prefab.PickupType");
+        //var pickupName = pickupType.enumNames[pickupType.enumValueIndex];
+        //EditorGUI.LabelField(typeRect, pickupName);
+        //EditorGUI.LabelField(typeRect, property.FindPropertyRelative("Pickup.PickupType"), GUIContent.none);
 
         // Set indent back to what it was
         EditorGUI.indentLevel = indent;
