@@ -2,68 +2,70 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-
-[RequireComponent(typeof(Rigidbody))]
-public class PlayerController : MonoBehaviour
+namespace RollABall
 {
-    public float speed;
-    public float growthRate;
-    public Text countText;
-    public Text winText;
-
-    private Rigidbody rigidBody;
-    private int count;
-
-    void Start()
+    [RequireComponent(typeof(Rigidbody))]
+    public class PlayerController : MonoBehaviour
     {
-        if (countText == null) throw new ArgumentNullException(nameof(countText));
-        if (winText == null) throw new ArgumentNullException(nameof(winText));
+        public float speed;
+        public float growthRate;
+        public Text countText;
+        public Text winText;
 
-        rigidBody = GetComponent<Rigidbody>();
-        count = 0;
-        winText.text = "";
-        SetCountText();
-    }
+        private Rigidbody rigidBody;
+        private int count;
 
-    void FixedUpdate()
-    {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-
-        rigidBody.AddForce(new Vector3(moveHorizontal,0, moveVertical) * speed);
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Pick Up"))
+        void Start()
         {
-            other.gameObject.SetActive(false);
-            var pickup = other.gameObject.GetComponent<Pickup>();
+            if (countText == null) throw new ArgumentNullException(nameof(countText));
+            if (winText == null) throw new ArgumentNullException(nameof(winText));
 
-            switch (pickup.PickupType)
+            rigidBody = GetComponent<Rigidbody>();
+            count = 0;
+            winText.text = "";
+            SetCountText();
+        }
+
+        void FixedUpdate()
+        {
+            float moveHorizontal = Input.GetAxis("Horizontal");
+            float moveVertical = Input.GetAxis("Vertical");
+
+            rigidBody.AddForce(new Vector3(moveHorizontal, 0, moveVertical) * speed);
+        }
+
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Pick Up"))
             {
-                case PickupType.Point:
-                    {
-                        count = count + 1;
-                        SetCountText();
-                        break;
-                    }
-                    
-                case PickupType.Grow:
-                    {
-                        transform.localScale += (Vector3.one * 0.1f);
-                        break;
-                    }
+                other.gameObject.SetActive(false);
+                var pickup = other.gameObject.GetComponent<Pickup>();
+
+                switch (pickup.PickupType)
+                {
+                    case PickupType.Point:
+                        {
+                            count = count + 1;
+                            SetCountText();
+                            break;
+                        }
+
+                    case PickupType.Grow:
+                        {
+                            transform.localScale += (Vector3.one * 0.1f);
+                            break;
+                        }
+                }
             }
         }
-    }
 
-    private void SetCountText()
-    {
-        countText.text = $"Count: {count}";
-        if (count >= 12)
+        private void SetCountText()
         {
-            winText.text = "You Win";
+            countText.text = $"Count: {count}";
+            if (count >= 12)
+            {
+                winText.text = "You Win";
+            }
         }
     }
 }

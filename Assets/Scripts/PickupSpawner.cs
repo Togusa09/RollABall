@@ -3,107 +3,103 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[System.Serializable]
-public class PickupWeights 
+namespace RollABall
 {
-    public int Weight;
-    public Pickup Prefab;
-}
-
-public class PickupSpawner : MonoBehaviour
-{
-    private PickupSpawnArea[] _pickupSpawnAreas;
-
-    public float PickupSpawnInterval;
-    public Pickup PickupPrefab;
-    public int MaxPickups = 20;
-
-    public List<PickupWeights> Pickups = new List<PickupWeights>();
-
-
-    void Awake()
+    public class PickupSpawner : MonoBehaviour
     {
-        RescanSpawnAreas();
-    }
+        private PickupSpawnArea[] _pickupSpawnAreas;
 
-    private void OnEnable()
-    {
-        RescanSpawnAreas();
-    }
+        public float PickupSpawnInterval;
+        public Pickup PickupPrefab;
+        public int MaxPickups = 20;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        StartCoroutine(SpawnPickup());
-    }
+        public List<PickupWeights> Pickups = new List<PickupWeights>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    IEnumerator SpawnPickup()
-    {
-        while (enabled)
+        void Awake()
         {
-            if (GetComponentsInChildren<Pickup>().Length < MaxPickups)
-            {
-                var spawnAreaIndex = Random.Range(0, _pickupSpawnAreas.Length);
-
-                var spawnArea = _pickupSpawnAreas[spawnAreaIndex];
-                var maxBound = spawnArea.transform.TransformPoint(new Vector3(0.5f, 0.5f, 0.5f));
-                var minBound = spawnArea.transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
-
-                var xSpawnPosition = Random.Range(minBound.x, maxBound.x);
-                var ySpawnPosition = 0.5f; // Shift half unit up as pickup origin is in center
-                var zSpawnPosition = Random.Range(minBound.z, maxBound.z);
-
-                var type = GetRandomPickupType();
-
-                GetOrCreatePickup(type, new Vector3(xSpawnPosition, ySpawnPosition, zSpawnPosition));
-            }
-
-            yield return new WaitForSeconds(PickupSpawnInterval);
+            RescanSpawnAreas();
         }
-    }
 
-    private PickupWeights GetRandomPickupType()
-    {
-        var totalWeights = Pickups.Sum(x => x.Weight);
-        var weightedRandom = Random.Range(0, totalWeights);
-
-        int currentSum = 0;
-        foreach(var pickup in Pickups)
+        private void OnEnable()
         {
-            currentSum += pickup.Weight;
+            RescanSpawnAreas();
+        }
 
-            if (currentSum > weightedRandom)
+        // Start is called before the first frame update
+        void Start()
+        {
+            StartCoroutine(SpawnPickup());
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
+        IEnumerator SpawnPickup()
+        {
+            while (enabled)
             {
-                return pickup;
+                if (GetComponentsInChildren<Pickup>().Length < MaxPickups)
+                {
+                    var spawnAreaIndex = Random.Range(0, _pickupSpawnAreas.Length);
+
+                    var spawnArea = _pickupSpawnAreas[spawnAreaIndex];
+                    var maxBound = spawnArea.transform.TransformPoint(new Vector3(0.5f, 0.5f, 0.5f));
+                    var minBound = spawnArea.transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
+
+                    var xSpawnPosition = Random.Range(minBound.x, maxBound.x);
+                    var ySpawnPosition = 0.5f; // Shift half unit up as pickup origin is in center
+                    var zSpawnPosition = Random.Range(minBound.z, maxBound.z);
+
+                    var type = GetRandomPickupType();
+
+                    GetOrCreatePickup(type, new Vector3(xSpawnPosition, ySpawnPosition, zSpawnPosition));
+                }
+
+                yield return new WaitForSeconds(PickupSpawnInterval);
             }
         }
 
-        return Pickups[0];
-    }
-
-    private Pickup GetOrCreatePickup(PickupWeights pickup, Vector3 position)
-    {
-        var existing = GetComponentsInChildren<Pickup>(true).FirstOrDefault(x => !x.isActiveAndEnabled && x.PickupType == pickup.Prefab.PickupType);
-        if (existing)
+        private PickupWeights GetRandomPickupType()
         {
-            existing.transform.position = position;
-            existing.transform.rotation = Quaternion.identity;
-            existing.gameObject.SetActive(true);
+            var totalWeights = Pickups.Sum(x => x.Weight);
+            var weightedRandom = Random.Range(0, totalWeights);
 
-            return existing;
+            int currentSum = 0;
+            foreach (var pickup in Pickups)
+            {
+                currentSum += pickup.Weight;
+
+                if (currentSum > weightedRandom)
+                {
+                    return pickup;
+                }
+            }
+
+            return Pickups[0];
         }
 
-        return Instantiate(pickup.Prefab, position, Quaternion.identity, transform);
-    }
+        private Pickup GetOrCreatePickup(PickupWeights pickup, Vector3 position)
+        {
+            var existing = GetComponentsInChildren<Pickup>(true).FirstOrDefault(x => !x.isActiveAndEnabled && x.PickupType == pickup.Prefab.PickupType);
+            if (existing)
+            {
+                existing.transform.position = position;
+                existing.transform.rotation = Quaternion.identity;
+                existing.gameObject.SetActive(true);
 
-    public void RescanSpawnAreas()
-    {
-        _pickupSpawnAreas = FindObjectsOfType<PickupSpawnArea>();
+                return existing;
+            }
+
+            return Instantiate(pickup.Prefab, position, Quaternion.identity, transform);
+        }
+
+        public void RescanSpawnAreas()
+        {
+            _pickupSpawnAreas = FindObjectsOfType<PickupSpawnArea>();
+        }
     }
 }

@@ -3,22 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+namespace RollABall
 {
-    public GameObject player;
-    private Vector3 offset;
-
-    // Start is called before the first frame update
-    void Start()
+    public class CameraController : MonoBehaviour
     {
-        if (player == null) throw new ArgumentNullException(nameof(player));
+        public GameObject player;
+        private Vector3 offset;
 
-        offset = transform.position - player.transform.position;
-    }
+        // Start is called before the first frame update
+        void Start()
+        {
+            if (player == null) throw new ArgumentNullException(nameof(player));
 
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        transform.position = player.transform.position + offset;
+            offset = transform.position - player.transform.position;
+        }
+
+        // Update is called once per frame
+        void LateUpdate()
+        {
+            transform.position = player.transform.position + offset;
+        }
     }
 }

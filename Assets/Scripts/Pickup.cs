@@ -2,26 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PickupType
+namespace RollABall
 {
-    Point,
-    Grow
-}
-
-
-public class Pickup : MonoBehaviour
-{
-    public PickupType PickupType;
-
-    // Start is called before the first frame update
-    void Start()
+    public class Pickup : MonoBehaviour
     {
-        
-    }
+        public PickupType PickupType;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Start is called before the first frame update
+        void Start()
+        {
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }
