@@ -15,6 +15,8 @@ namespace RollABall
         private Rigidbody rigidBody;
         private int count;
 
+        public Action OnLevelComplete;
+
         void Start()
         {
             if (countText == null) throw new ArgumentNullException(nameof(countText));
@@ -65,6 +67,9 @@ namespace RollABall
             if (count >= 12)
             {
                 winText.text = "You Win";
+
+                count = 0;
+                OnLevelComplete.Invoke();
             }
         }
     }

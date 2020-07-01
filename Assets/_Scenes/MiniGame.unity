@@ -1067,7 +1067,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 648894356}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.498, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2393,6 +2393,7 @@ MonoBehaviour:
   MapeSectionPrefab: {fileID: 4918755535479668191, guid: 9b5d3e9e792842c4784b96b744e9b708,
     type: 3}
   PickupSpawner: {fileID: 655827311}
+  PlayerController: {fileID: 648894361}
   MapSize: 10
 --- !u!4 &1904527575
 Transform:

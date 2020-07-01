@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,6 +16,14 @@ namespace RollABall
 
         public List<PickupWeights> Pickups = new List<PickupWeights>();
 
+        internal void ClearPickups()
+        {
+            var pickups = GetComponentsInChildren<Pickup>(true);
+            foreach(var pickup in pickups)
+            {
+                pickup.gameObject.SetActive(false);
+            }
+        }
 
         void Awake()
         {
@@ -24,6 +33,7 @@ namespace RollABall
         private void OnEnable()
         {
             RescanSpawnAreas();
+            //StartCoroutine(SpawnPickup());
         }
 
         // Start is called before the first frame update
@@ -44,15 +54,15 @@ namespace RollABall
             {
                 if (GetComponentsInChildren<Pickup>().Length < MaxPickups)
                 {
-                    var spawnAreaIndex = Random.Range(0, _pickupSpawnAreas.Length);
+                    var spawnAreaIndex = UnityEngine.Random.Range(0, _pickupSpawnAreas.Length);
 
                     var spawnArea = _pickupSpawnAreas[spawnAreaIndex];
                     var maxBound = spawnArea.transform.TransformPoint(new Vector3(0.5f, 0.5f, 0.5f));
                     var minBound = spawnArea.transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
 
-                    var xSpawnPosition = Random.Range(minBound.x, maxBound.x);
+                    var xSpawnPosition = UnityEngine.Random.Range(minBound.x, maxBound.x);
                     var ySpawnPosition = 0.5f; // Shift half unit up as pickup origin is in center
-                    var zSpawnPosition = Random.Range(minBound.z, maxBound.z);
+                    var zSpawnPosition = UnityEngine.Random.Range(minBound.z, maxBound.z);
 
                     var type = GetRandomPickupType();
 
@@ -66,7 +76,7 @@ namespace RollABall
         private PickupWeights GetRandomPickupType()
         {
             var totalWeights = Pickups.Sum(x => x.Weight);
-            var weightedRandom = Random.Range(0, totalWeights);
+            var weightedRandom = UnityEngine.Random.Range(0, totalWeights);
 
             int currentSum = 0;
             foreach (var pickup in Pickups)

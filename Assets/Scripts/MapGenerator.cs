@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Boo.Lang;
+using System.Linq;
+using UnityEngine;
 
 namespace RollABall
 {
@@ -6,16 +8,42 @@ namespace RollABall
     {
         public MapSection MapeSectionPrefab;
         public PickupSpawner PickupSpawner;
+        public PlayerController PlayerController;
+
+        private List<MapSection> _mapSections = new List<MapSection>();
 
         public int MapSize = 10;
 
         void Start()
         {
-            PickupSpawner.enabled = false;
+            GenerateMap();
+            PlayerController.OnLevelComplete += LevelComplete;
+        }
 
+        private void LevelComplete()
+        {
+            GenerateMap();
+        }
+           
+
+        public void GenerateMap()
+        {
+            PickupSpawner.enabled = false;
+            PickupSpawner.ClearPickups();
+
+            PlayerController.gameObject.SetActive(false);
+
+            while (_mapSections.Any())
+            {
+                var mapSection = _mapSections.Pop();
+                mapSection.gameObject.SetActive(false);
+                Destroy(mapSection.gameObject);
+            }
+
+            var halfSize = MapSize / 2;
             var mapDef = new bool[MapSize, MapSize];
 
-            var startPosition = new Vector2Int(Random.Range(0, MapSize), Random.Range(0, MapSize));
+            var startPosition = new Vector2Int(halfSize, halfSize);
             var iterations = 4;
             var steps = 6;
 
@@ -52,20 +80,21 @@ namespace RollABall
                 }
             }
 
-            for (var x = 0; x < MapSize; x++)
+            for (var x = -0; x < MapSize; x++)
             {
-                for (var y = 0; y < MapSize; y++)
+                for (var y = -0; y < MapSize; y++)
                 {
                     if (mapDef[x, y])
                     {
-                        var halfSize = MapSize / 2;
+                        
                         var pos = new Vector3(
                             (x - startPosition.x) * MapSize,
                             0,
                             (y - startPosition.y) * MapSize
                         );
 
-                        var mapSection = Instantiate(MapeSectionPrefab, pos, Quaternion.identity);
+                        var mapSection = Instantiate(MapeSectionPrefab, pos, Quaternion.identity, transform);
+                        _mapSections.Add(mapSection);
                         mapSection.WestWall.SetActive(x == 0 || !mapDef[x - 1, y]);
                         mapSection.EastWall.SetActive(x == (MapSize - 1) || !mapDef[x + 1, y]);
                         mapSection.SouthWall.SetActive(y == 0 || !mapDef[x, y - 1]);
@@ -74,6 +103,8 @@ namespace RollABall
                 }
             }
 
+            PlayerController.transform.position = new Vector3(0, 0.5f, 0);
+            PlayerController.gameObject.SetActive(true);
             PickupSpawner.enabled = true;
         }
 
