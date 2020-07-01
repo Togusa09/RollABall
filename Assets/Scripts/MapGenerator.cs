@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RollABall
 {
@@ -11,10 +9,8 @@ namespace RollABall
 
         public int MapSize = 10;
 
-        // Start is called before the first frame update
         void Start()
         {
-
             PickupSpawner.enabled = false;
 
             var mapDef = new bool[MapSize, MapSize];
@@ -56,7 +52,6 @@ namespace RollABall
                 }
             }
 
-
             for (var x = 0; x < MapSize; x++)
             {
                 for (var y = 0; y < MapSize; y++)
@@ -79,19 +74,9 @@ namespace RollABall
                 }
             }
 
-            //var newPlayerPosition = ConvertMapPosToWorld(startPosition.x, startPosition.y) + new Vector3(0, 0.5f, 0);
-            //var playerOffset = Player.transform.position - newPlayerPosition;
-
-            //Player.transform.position = newPlayerPosition;
-            //MainCamera.transform.position -= playerOffset;
-
             PickupSpawner.enabled = true;
         }
 
-
-
-
-        // Update is called once per frame
         void Update()
         {
 
