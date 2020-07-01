@@ -33,9 +33,8 @@ namespace RollABall
 
             PlayerController.gameObject.SetActive(false);
 
-            while (_mapSections.Any())
+            foreach (var mapSection in _mapSections)
             {
-                var mapSection = _mapSections.Pop();
                 mapSection.gameObject.SetActive(false);
                 Destroy(mapSection.gameObject);
             }
