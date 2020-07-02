@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5417529108483049158}
   - component: {fileID: 173201974916411999}
   m_Layer: 0
-  m_Name: Pick Up
+  m_Name: Point Pickup
   m_TagString: Pick Up
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,6 +58,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -135,3 +136,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a36d58f0bbd4ec54b891a51631116f48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PickupType: 0

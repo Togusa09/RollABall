@@ -92,6 +92,8 @@ namespace RollABall
                     case PickupType.Point:
                         {
                             Count = Count + 1;
+                            var audioSource = GetComponent<AudioSource>();
+                            audioSource.PlayOneShot(audioSource.clip, 0.5f);
                             break;
                         }
 

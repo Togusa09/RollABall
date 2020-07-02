@@ -116,3 +116,4 @@ fabric.properties
 /Assets/HoloToolkit-Examples*
 /Assets/HoloToolkit/Common/Scripts/Editor/Obsolete*
 /Assets/HoloToolkit/Common/Shaders/Obsolete*
+/Assets/Store assets/*
