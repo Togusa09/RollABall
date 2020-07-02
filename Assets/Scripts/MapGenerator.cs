@@ -17,7 +17,7 @@ namespace RollABall
         void Start()
         {
             GenerateMap();
-            PlayerController.OnLevelComplete += LevelComplete;
+            PlayerController.OnLevelChange += LevelComplete;
         }
 
         private void LevelComplete()
@@ -33,9 +33,10 @@ namespace RollABall
 
             PlayerController.gameObject.SetActive(false);
 
-            foreach (var mapSection in _mapSections)
+            foreach (var mapSection in _mapSections.ToArray())
             {
                 mapSection.gameObject.SetActive(false);
+                _mapSections.Remove(mapSection);
                 Destroy(mapSection.gameObject);
             }
 

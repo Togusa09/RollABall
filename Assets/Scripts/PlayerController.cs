@@ -10,12 +10,56 @@ namespace RollABall
         public float speed;
         public float growthRate;
         public Text countText;
+        public Text remainingCountText;
         public Text winText;
+        public Text levelText;
 
         private Rigidbody rigidBody;
-        private int count;
+        
+        private int _maxScore = 1;
+        private int _scoreIncrement = 1;
+        
+        public Action OnLevelChange;
 
-        public Action OnLevelComplete;
+        private int _level = 1;
+        private int Level
+        {
+            get { return _level; }
+            set
+            {
+                if (_level == value) return;
+
+                _level = value;
+
+                levelText.text = $"Level {_level}";
+                remainingCountText.text = $"Next Level In: {_maxScore - _count}";
+
+                OnLevelChange?.Invoke();
+            }
+        }
+
+        private int _count;
+        private int Count 
+        { 
+            get 
+            { 
+                return _count; 
+            }
+            set
+            {
+                _count = value;
+
+                countText.text = $"Count: {_count}";
+                remainingCountText.text = $"Next Level In: {_maxScore - _count}";
+                if (_count >= _maxScore)
+                {
+                    //winText.text = "You Win";
+                    _maxScore += _scoreIncrement;
+                    _scoreIncrement += _scoreIncrement;
+                    Level++;
+                }
+            }
+        }
 
         void Start()
         {
@@ -23,9 +67,9 @@ namespace RollABall
             if (winText == null) throw new ArgumentNullException(nameof(winText));
 
             rigidBody = GetComponent<Rigidbody>();
-            count = 0;
+            Count = 0;
             winText.text = "";
-            SetCountText();
+            levelText.text = $"Level {_level}";
         }
 
         void FixedUpdate()
@@ -47,8 +91,7 @@ namespace RollABall
                 {
                     case PickupType.Point:
                         {
-                            count = count + 1;
-                            SetCountText();
+                            Count = Count + 1;
                             break;
                         }
 
@@ -58,18 +101,6 @@ namespace RollABall
                             break;
                         }
                 }
-            }
-        }
-
-        private void SetCountText()
-        {
-            countText.text = $"Count: {count}";
-            if (count >= 12)
-            {
-                winText.text = "You Win";
-
-                count = 0;
-                OnLevelComplete.Invoke();
             }
         }
     }
