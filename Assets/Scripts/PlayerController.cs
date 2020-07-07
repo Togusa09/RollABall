@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace RollABall
@@ -74,10 +75,19 @@ namespace RollABall
 
         void FixedUpdate()
         {
-            float moveHorizontal = Input.GetAxis("Horizontal");
-            float moveVertical = Input.GetAxis("Vertical");
+            //float moveHorizontal = Input.GetAxis("Horizontal");
+            //float moveVertical = Input.GetAxis("Vertical");
 
-            rigidBody.AddForce(new Vector3(moveHorizontal, 0, moveVertical) * speed);
+            //rigidBody.AddForce(new Vector3(moveHorizontal, 0, moveVertical) * speed);
+            rigidBody.AddForce(new Vector3(_movementForce.x, 0, _movementForce.y) * speed);
+        }
+
+        private Vector2 _movementForce;
+
+        void OnMove(InputValue value)
+        {
+                _movementForce = value.Get<Vector2>();
+                
         }
 
         void OnTriggerEnter(Collider other)
