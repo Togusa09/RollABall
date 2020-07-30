@@ -13,6 +13,9 @@ namespace RollABall
         private List<MapSection> _mapSections = new List<MapSection>();
         private MapSection _exitSection;
 
+        [SerializeField]
+        private UIController _uIController;
+
         public int MapSize = 10;
 
         void Start()
@@ -42,7 +45,7 @@ namespace RollABall
             PickupSpawner.ClearPickups();
 
             PlayerController.gameObject.SetActive(false);
-            PlayerController.winText.text = "";
+            _uIController.WinText = "";
 
             foreach (var mapSection in _mapSections.ToArray())
             {

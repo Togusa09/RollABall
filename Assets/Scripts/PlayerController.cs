@@ -10,12 +10,7 @@ namespace RollABall
     {
         public float speed;
         public float growthRate;
-        public Text countText;
-        public Text remainingCountText;
-        public Text winText;
-        public Text levelText;
-
-        private Rigidbody rigidBody;
+         private Rigidbody rigidBody;
         
         private int _maxScore = 1;
         private int _scoreIncrement = 1;
@@ -25,6 +20,8 @@ namespace RollABall
 
         [SerializeField]
         private PickupSpawner _pickupSpawner;
+        [SerializeField]
+        private UIController _uIController;
 
         private int _level = 1;
         private int Level
@@ -36,10 +33,8 @@ namespace RollABall
 
                 _level = value;
 
-                levelText.text = $"Level {_level}";
-                remainingCountText.text = $"Next Level In: {_maxScore - _count}";
-
-                //OnLevelChange?.Invoke();
+                _uIController.LevelText = $"Level {_level}";
+                _uIController.RemainingCountText = $"Next Level In: {_maxScore - _count}";
             }
         }
 
@@ -54,14 +49,14 @@ namespace RollABall
             {
                 _count = value;
 
-                countText.text = $"Count: {_count}";
-                remainingCountText.text = $"Next Level In: {_maxScore - _count}";
+                _uIController.CountText = $"Count: {_count}";
+                _uIController.RemainingCountText = $"Next Level In: {_maxScore - _count}";
                 if (_count >= _maxScore)
                 {
                     _maxScore += _scoreIncrement;
                     _scoreIncrement += _scoreIncrement;
                     Level++;
-                    winText.text = "Level complete - Move to exit";
+                    _uIController.WinText = "Level complete - Move to exit";
                     OnLevelComplete?.Invoke();
                     _pickupSpawner.ClearPickups();
                 }
@@ -70,13 +65,10 @@ namespace RollABall
 
         void Start()
         {
-            if (countText == null) throw new ArgumentNullException(nameof(countText));
-            if (winText == null) throw new ArgumentNullException(nameof(winText));
-
             rigidBody = GetComponent<Rigidbody>();
             Count = 0;
-            winText.text = "";
-            levelText.text = $"Level {_level}";
+            _uIController.WinText = "";
+            _uIController.LevelText = $"Level {_level}";
         }
 
         void FixedUpdate()

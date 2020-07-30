@@ -632,6 +632,7 @@ GameObject:
   - component: {fileID: 474942537}
   - component: {fileID: 474942536}
   - component: {fileID: 474942535}
+  - component: {fileID: 474942539}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -722,6 +723,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &474942539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474942534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1822c79d999a6de4bbf69c5afd208a7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countText: {fileID: 1799334765}
+  remainingCountText: {fileID: 1326800301}
+  winText: {fileID: 937577409}
+  levelText: {fileID: 641247276}
 --- !u!1001 &493491853
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1169,11 +1186,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   growthRate: 0.2
-  countText: {fileID: 1799334765}
-  remainingCountText: {fileID: 1326800301}
-  winText: {fileID: 937577409}
-  levelText: {fileID: 641247276}
   _pickupSpawner: {fileID: 655827311}
+  _uIController: {fileID: 474942539}
 --- !u!54 &648894362
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2749,6 +2763,7 @@ MonoBehaviour:
     type: 3}
   PickupSpawner: {fileID: 655827311}
   PlayerController: {fileID: 648894361}
+  _uIController: {fileID: 474942539}
   MapSize: 10
 --- !u!4 &1904527575
 Transform:
