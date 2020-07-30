@@ -11,20 +11,30 @@ namespace RollABall
         public PlayerController PlayerController;
 
         private List<MapSection> _mapSections = new List<MapSection>();
+        private MapSection _exitSection;
 
         public int MapSize = 10;
 
         void Start()
         {
             GenerateMap();
-            PlayerController.OnLevelChange += LevelComplete;
+            PlayerController.OnLevelComplete += LevelComplete;
         }
 
         private void LevelComplete()
         {
-            GenerateMap();
+            //GenerateMap();
+            PickupSpawner.enabled = false;
+            _exitSection.OnPlayerExit += OnPlayerExit;
+            _exitSection.OpenHatch();
         }
            
+        private void OnPlayerExit()
+        {
+            _exitSection.OnPlayerExit -= OnPlayerExit;
+            _exitSection = null;
+            GenerateMap();
+        }
 
         public void GenerateMap()
         {
@@ -32,6 +42,7 @@ namespace RollABall
             PickupSpawner.ClearPickups();
 
             PlayerController.gameObject.SetActive(false);
+            PlayerController.winText.text = "";
 
             foreach (var mapSection in _mapSections.ToArray())
             {
@@ -86,7 +97,6 @@ namespace RollABall
                 {
                     if (mapDef[x, y])
                     {
-                        
                         var pos = new Vector3(
                             (x - startPosition.x) * MapSize,
                             0,
@@ -103,9 +113,17 @@ namespace RollABall
                 }
             }
 
-            PlayerController.transform.position = new Vector3(0, 0.5f, 0);
+            var exitLocation = Random.Range(0, _mapSections.Count() - 1);
+            _exitSection = _mapSections[exitLocation];
+
+            PlayerController.transform.position = new Vector3(0, 20f, 0);
             PlayerController.gameObject.SetActive(true);
             PickupSpawner.enabled = true;
+        }
+
+        void PlayerExit()
+        {
+            GenerateMap();
         }
 
         void Update()

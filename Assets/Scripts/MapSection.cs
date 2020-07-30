@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RollABall
 {
@@ -8,6 +9,11 @@ namespace RollABall
         public GameObject SouthWall;
         public GameObject EastWall;
         public GameObject WestWall;
+
+        [SerializeField]
+        private GameObject _hatch;
+
+        public Action OnPlayerExit;
 
         // Start is called before the first frame update
         void Start()
@@ -19,6 +25,16 @@ namespace RollABall
         void Update()
         {
 
+        }
+
+        public void OpenHatch()
+        {
+            _hatch.gameObject.SetActive(false);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            OnPlayerExit?.Invoke();
         }
     }
 }

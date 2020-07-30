@@ -33,7 +33,7 @@ namespace RollABall
         private void OnEnable()
         {
             RescanSpawnAreas();
-            //StartCoroutine(SpawnPickup());
+            StartCoroutine(SpawnPickup());
         }
 
         // Start is called before the first frame update

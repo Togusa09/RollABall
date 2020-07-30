@@ -21,6 +21,10 @@ namespace RollABall
         private int _scoreIncrement = 1;
         
         public Action OnLevelChange;
+        public Action OnLevelComplete;
+
+        [SerializeField]
+        private PickupSpawner _pickupSpawner;
 
         private int _level = 1;
         private int Level
@@ -35,7 +39,7 @@ namespace RollABall
                 levelText.text = $"Level {_level}";
                 remainingCountText.text = $"Next Level In: {_maxScore - _count}";
 
-                OnLevelChange?.Invoke();
+                //OnLevelChange?.Invoke();
             }
         }
 
@@ -54,10 +58,12 @@ namespace RollABall
                 remainingCountText.text = $"Next Level In: {_maxScore - _count}";
                 if (_count >= _maxScore)
                 {
-                    //winText.text = "You Win";
                     _maxScore += _scoreIncrement;
                     _scoreIncrement += _scoreIncrement;
                     Level++;
+                    winText.text = "Level complete - Move to exit";
+                    OnLevelComplete?.Invoke();
+                    _pickupSpawner.ClearPickups();
                 }
             }
         }
@@ -75,10 +81,6 @@ namespace RollABall
 
         void FixedUpdate()
         {
-            //float moveHorizontal = Input.GetAxis("Horizontal");
-            //float moveVertical = Input.GetAxis("Vertical");
-
-            //rigidBody.AddForce(new Vector3(moveHorizontal, 0, moveVertical) * speed);
             rigidBody.AddForce(new Vector3(_movementForce.x, 0, _movementForce.y) * speed);
         }
 
@@ -86,8 +88,7 @@ namespace RollABall
 
         void OnMove(InputValue value)
         {
-                _movementForce = value.Get<Vector2>();
-                
+            _movementForce = value.Get<Vector2>();
         }
 
         void OnTriggerEnter(Collider other)
