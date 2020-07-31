@@ -735,10 +735,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1822c79d999a6de4bbf69c5afd208a7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countText: {fileID: 1799334765}
-  remainingCountText: {fileID: 1326800301}
-  winText: {fileID: 937577409}
-  levelText: {fileID: 641247276}
+  _countText: {fileID: 1799334765}
+  _remainingCountText: {fileID: 1326800301}
+  _winText: {fileID: 1799334765}
+  _levelText: {fileID: 641247276}
 --- !u!1001 &493491853
 PrefabInstance:
   m_ObjectHideFlags: 0
