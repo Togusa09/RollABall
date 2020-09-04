@@ -12,13 +12,15 @@ namespace RollABall
 
         [SerializeField]
         private GameObject _hatch;
+        [SerializeField]
+        private GameObject _MapIcon;
 
         public Action OnPlayerExit;
 
         // Start is called before the first frame update
         void Start()
         {
-
+            _MapIcon?.SetActive(false);
         }
 
         // Update is called once per frame
@@ -30,6 +32,7 @@ namespace RollABall
         public void OpenHatch()
         {
             _hatch.gameObject.SetActive(false);
+            _MapIcon?.SetActive(true);
         }
 
         private void OnTriggerEnter(Collider other)
